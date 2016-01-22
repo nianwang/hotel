@@ -1,5 +1,6 @@
 const updateNotifier = require('update-notifier')
 const sudoBlock = require('sudo-block')
+const exitHook = require('exit-hook')
 const servers = require('./servers')
 const daemon = require('./daemon')
 const pkg = require('../../package.json')
@@ -14,6 +15,7 @@ module.exports = processArgv => {
     .help('help').alias('h', 'help')
     .usage('Usage: $0 <command> [options]')
     .command('add [-n name] [-o file] [-e env] [-p port] <cmd>', 'Add server')
+    .command('run [-n name] [-o file] [-e env] [-p port] <cmd>', 'Add server and remove it on ctrl-c')
     .command('rm [name]', 'Remove server')
     .command('ls', 'List servers')
     .command('start', 'Start daemon')
@@ -33,6 +35,22 @@ module.exports = processArgv => {
     if (_[0] === 'add' && _[1]) {
       servers.add(_[1], argv)
       return cb()
+    }
+
+    if (_[0] === 'run' && _[1]) {
+      servers.add(_[1], argv)
+      // used to prevent Node from exiting
+      setInterval(() => {}, 60 * 60 * 1000)
+
+      console.log()
+      console.log('Press ctrl-c to remove server')
+
+      return exitHook(() => {
+        console.log()
+        console.log()
+        servers.rm(argv.n)
+        console.log()
+      })
     }
 
     if (_[0] === 'rm') {
