@@ -6,7 +6,7 @@ Vue.use(Vuex)
 
 const state = {
   version: '',
-  monitors: [],
+  monitors: null,
   output: [],
   outputId: ''
 }
@@ -36,6 +36,6 @@ const mutations = {
 
 module.exports = new Vuex.Store({
   state,
-  mutations
-  // middlewares: [require('vuex/logger')()]
+  mutations,
+  middlewares: [require('vuex/logger')()]
 })

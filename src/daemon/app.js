@@ -4,6 +4,7 @@ const express = require('express')
 const vhost = require('vhost')
 const httpProxy = require('http-proxy')
 const serverReady = require('server-ready')
+const pkg = require('../../package.json')
 const conf = require('../conf')
 
 // Require routes
@@ -47,6 +48,9 @@ module.exports = (servers) => {
 
   // API
   app.use(`${API_ROOT}/servers`, api)
+
+  // Version
+  app.use(`${API_ROOT}/version`, (req, res) => res.send(pkg.version))
 
   // .tld host
   app.use(vhost(new RegExp(`.*\.${conf.tld}`), tldHost))

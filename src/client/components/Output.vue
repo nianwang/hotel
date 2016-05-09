@@ -1,6 +1,11 @@
 <template>
-  <div v-on:scroll="onScroll">
-    <div v-for="item in output" track-by="_uid">
+  <div
+    class="output"
+    v-show="outputId"
+    v-on:scroll="onScroll">
+    <div
+      v-for="item in output"
+      track-by="_uid">
       {{{ item.line | escape | ansi }}}
     </div>
   </div>

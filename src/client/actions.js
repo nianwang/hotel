@@ -2,11 +2,18 @@
 const API_ROOT = '/_'
 
 module.exports = {
+  fetchVersion,
   startMonitor,
   stopMonitor,
   watchMonitors,
   watchOutput,
   unwatchOutput
+}
+
+function fetchVersion ({ dispatch }) {
+  fetch(`${API_ROOT}/version`)
+    .then(response => response.text())
+    .then(data => dispatch('SET_VERSION', data))
 }
 
 function startMonitor (store, id) {
